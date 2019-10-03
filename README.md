@@ -10,5 +10,5 @@ in Proceedings of the 24th Conference of Open Innovations Association FRUCT, 3rd
 The repository has the following folders:
 
     sed_endtoend --> Main source files for data generation, network models and callbacks.
-    notebooks --> Jupyter notebooks for running the experiments.
+    exps --> Jupyter notebooks to run the experiments.
     utils --> Some useful scripts to work with the dataset.
