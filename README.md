@@ -9,6 +9,6 @@ Organization of the repository
 
 The repository has the following folders:
 
-    sed_endtoend --> Main source files for data generation, network model and callbacks.
+    sed_endtoend --> Main source files for data generation, network models and callbacks.
     notebooks --> Jupyter notebooks for running the experiments.
     utils --> Some useful scripts to work with the dataset.
