@@ -117,32 +117,18 @@ def SMel_PCEN(N_mels,wins,audio_win,audio_hop,alpha=1,scaler=None,amin=1e-10,fil
 
     x = Input(shape=(wins,n_freqs), dtype='float32') #(1025,50)
     
-    #reg = L1L2(0.0,0.0001,filters)
-
 
     layer= DOT(N_mels)
     y = layer(x)
-    #y = Lambda(lambda x: x/(audio_win/2+1))(y)
-    
-
-    #y = Activation('relu')(y)
-
-    #y = Lambda(lambda x: 10*K.log(K.maximum(amin, x*alpha))/K.log(10.))(y)
-
-    #M = Conv1D(N_mels,1024, strides=1, padding='same', use_bias=False)(y)
 
     T = 0.06 * 22050 / 512.
     b = (np.sqrt(1 + 4* T**2) - 1) / (2 * T**2)
     cell = LPF(b,N_mels)
     layer = RNN(cell,return_sequences=True)
     M = layer(y)
-    #y = Lambda(pcen, name='pcen')([y, M]) 	
+
 
     y = PCEN()([y,M])
-    #y = M
-
-    #y = Lambda(lambda x: x*104107832.36)(y)
-    #y = Lambda(lambda x: (x/(eps+M)**alpha2+delta)**r -delta**r )(y)
     
 
     if scaler is not None:
