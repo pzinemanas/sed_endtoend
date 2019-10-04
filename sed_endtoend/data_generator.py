@@ -19,7 +19,7 @@ class DataGenerator():
     def __init__(self, list_IDs, labels, label_list=[],
                  sequence_time=1.0, sequence_hop_time=0.5,frames=False,
                  audio_hop=882, audio_win=1764,n_fft=2048,sr=44100,mel_bands=128,
-                 normalize='none',get_annotations=True,dataset='MAVD'):
+                 normalize='none',get_annotations=True,dataset='MAVD',normalize_energy=True,convert_to_dB=True):
 
         """ Initialize the DataGenerator 
         Parameters
@@ -94,6 +94,8 @@ class DataGenerator():
         self.get_annotations = get_annotations
         self.norm_scaler = np.zeros(self.mel_bands)  
         self.dataset = dataset #URBAN-SED or MAVD
+        self.normalize_energy = normalize_energy
+        self.convert_to_dB = convert_to_dB
         
 
     def __data_generation(self, list_IDs_temp):
@@ -246,12 +248,17 @@ class DataGenerator():
                 stft = np.abs(librosa.core.stft(audio_slice, n_fft=self.n_fft, hop_length=self.audio_hop,
                                                 win_length=self.audio_win, center=True))**2
                 #print(stft.shape)
-                stft = stft/(self.n_fft/2+1)
+                if self.normalize_energy:
+                    stft = stft/(self.n_fft/2+1)
+                    
+                    
                 S.append(stft)
 
                 melspec = self.mel_basis.dot(stft)
                 #melspec = melspec*self.alpha
-                melspec = librosa.core.power_to_db(melspec)
+                
+                if self.convert_to_dB:
+                    melspec = librosa.core.power_to_db(melspec)
 
                 mel.append(melspec.T)
 
